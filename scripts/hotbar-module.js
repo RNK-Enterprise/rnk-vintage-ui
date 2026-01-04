@@ -1,18 +1,40 @@
-// Hotbar management module for RNK 12 UI
+// Hotbar management module for RNK Vintage UI
 
 import { DragHandlers } from './drag-handlers.js';
+import { isFeatureEnabled } from './settings-module.js';
 
 export function initializeHotbar() {
+    if (!isFeatureEnabled('enableHotbarDrag')) {
+        console.log('RNK Vintage UI | Hotbar drag disabled by settings');
+        return;
+    }
+    
+    console.log('RNK Vintage UI | Hotbar module initialized');
+    
+    // Set up the hotbar immediately if it exists
+    const hotbar = document.getElementById('hotbar');
+    if (hotbar) {
+        setupHotbar();
+    }
+    
+    // Also hook into renders to re-apply if hotbar is re-rendered
+    Hooks.on('renderHotbar', () => {
+        if (!isFeatureEnabled('enableHotbarDrag')) return;
+        setupHotbar();
+    });
+}
+
+function setupHotbar() {
     const handlers = DragHandlers.createHotbarHandlers();
     
+    document.removeEventListener('mousemove', handlers.drag);
+    document.removeEventListener('mouseup', handlers.dragEnd);
     document.addEventListener('mousemove', handlers.drag);
     document.addEventListener('mouseup', handlers.dragEnd);
-    
-    Hooks.on('renderHotbar', () => {
         const hotbar = document.getElementById('hotbar');
         if (!hotbar) return;
 
-        const savedPosition = localStorage.getItem('rnk-12-ui-hotbar-position');
+        const savedPosition = localStorage.getItem('rnk-vintage-ui-hotbar-position');
         if (savedPosition) {
             const pos = JSON.parse(savedPosition);
             DragHandlers.setTranslate(pos.x, pos.y, hotbar);
@@ -25,7 +47,6 @@ export function initializeHotbar() {
         hotbar.addEventListener('mousedown', handlers.dragStart);
 
         createMinimizeButton(hotbar);
-    });
 }
 
 function createMinimizeButton(hotbar) {

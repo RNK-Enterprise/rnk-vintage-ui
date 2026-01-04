@@ -1,108 +1,97 @@
-// Sidebar tabs management module for RNK 12 UI
+// Sidebar tabs management module for RNK Vintage UI
 
 import { DragHandlers } from './drag-handlers.js';
+import { isFeatureEnabled } from './settings-module.js';
 
 export function initializeSidebar() {
-    Hooks.once('ready', () => {
-        console.log('RNK 12 UI | Hotbar repositioning module initialized');
+    if (!isFeatureEnabled('enableSidebarDrag')) {
+        console.log('RNK Vintage UI | Sidebar drag disabled by settings');
+        return;
+    }
+    
+    console.log('RNK Vintage UI | Sidebar module initialized');
 
-        const sidebarTabs = document.getElementById('sidebar-tabs');
-        if (!sidebarTabs) return;
+    const sidebarTabs = document.getElementById('sidebar-tabs');
+    if (!sidebarTabs) {
+        console.warn('RNK Vintage UI | Sidebar tabs element not found, trying on next render');
+        // Try again on next sidebar render
+        Hooks.once('renderSidebar', () => {
+            const tabs = document.getElementById('sidebar-tabs');
+            if (tabs) {
+                // setupSidebarDrag(tabs);  // DISABLED - causes sidebar to disappear
+                setupSidebarMinimize(tabs);
+            }
+        });
+        return;
+    }
 
-        setupSidebarDrag(sidebarTabs);
-        setupSidebarMinimize(sidebarTabs);
-    });
+    // setupSidebarDrag(sidebarTabs);  // DISABLED - causes sidebar to disappear
+    setupSidebarMinimize(sidebarTabs);
 }
 
 function setupSidebarDrag(sidebarTabs) {
-    let isSidebarDragging = false;
-    let isSidebarMouseDown = false;
-    let hasSidebarDragged = false;
-    let sidebarCurrentX;
-    let sidebarCurrentY;
-    let sidebarInitialX;
-    let sidebarInitialY;
-    let sidebarStartX;
-    let sidebarStartY;
-    let sidebarXOffset = 0;
-    let sidebarYOffset = 0;
-    const DRAG_THRESHOLD = 5;
+    // Use same pattern as scene-controls which works
+    let isDragging = false;
+    let currentX, currentY, initialX, initialY;
+    let xOffset = 0;
+    let yOffset = 0;
 
-    const savedSidebarPosition = localStorage.getItem('rnk-12-ui-sidebar-position');
-    if (savedSidebarPosition) {
-        const pos = JSON.parse(savedSidebarPosition);
+    const savedPosition = localStorage.getItem('rnk-vintage-ui-sidebar-position');
+    if (savedPosition) {
+        const pos = JSON.parse(savedPosition);
+        sidebarTabs.style.setProperty('left', pos.x + 'px', 'important');
+        sidebarTabs.style.setProperty('top', pos.y + 'px', 'important');
         sidebarTabs.style.setProperty('right', 'auto', 'important');
-        sidebarTabs.style.setProperty('top', 'auto', 'important');
-        DragHandlers.setTranslate(pos.x, pos.y, sidebarTabs);
-        sidebarXOffset = pos.x;
-        sidebarYOffset = pos.y;
+        sidebarTabs.style.setProperty('bottom', 'auto', 'important');
+        xOffset = pos.x;
+        yOffset = pos.y;
     }
 
     sidebarTabs.style.cursor = 'move';
 
-    function sidebarDragStart(e) {
-        if (!sidebarTabs.style.left || sidebarTabs.style.left === 'auto') {
+    function dragStart(e) {
+        // If no saved position, get current position from CSS
+        if (xOffset === 0 && yOffset === 0) {
             const rect = sidebarTabs.getBoundingClientRect();
-            sidebarXOffset = rect.left;
-            sidebarYOffset = window.innerHeight - rect.bottom;
-        }
-
-        sidebarInitialX = e.clientX - sidebarXOffset;
-        sidebarInitialY = window.innerHeight - e.clientY - sidebarYOffset;
-        sidebarStartX = e.clientX;
-        sidebarStartY = e.clientY;
-        isSidebarMouseDown = true;
-        isSidebarDragging = false;
-        hasSidebarDragged = false;
-    }
-
-    function sidebarDrag(e) {
-        if (!isSidebarMouseDown) return;
-
-        if (!isSidebarDragging) {
-            const dx = e.clientX - sidebarStartX;
-            const dy = e.clientY - sidebarStartY;
-            if (Math.sqrt(dx*dx + dy*dy) < DRAG_THRESHOLD) return;
-            isSidebarDragging = true;
-            hasSidebarDragged = true;
+            xOffset = rect.left;
+            yOffset = rect.top;
         }
         
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+        isDragging = true;
+    }
+
+    function drag(e) {
+        if (!isDragging) return;
         e.preventDefault();
-        sidebarCurrentX = e.clientX - sidebarInitialX;
-        sidebarCurrentY = window.innerHeight - e.clientY - sidebarInitialY;
         
-        sidebarXOffset = sidebarCurrentX;
-        sidebarYOffset = sidebarCurrentY;
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        xOffset = currentX;
+        yOffset = currentY;
         
+        sidebarTabs.style.setProperty('left', currentX + 'px', 'important');
+        sidebarTabs.style.setProperty('top', currentY + 'px', 'important');
         sidebarTabs.style.setProperty('right', 'auto', 'important');
-        sidebarTabs.style.setProperty('top', 'auto', 'important');
-        DragHandlers.setTranslate(sidebarCurrentX, sidebarCurrentY, sidebarTabs);
+        sidebarTabs.style.setProperty('bottom', 'auto', 'important');
     }
 
-    function sidebarDragEnd() {
-        isSidebarMouseDown = false;
-        if (!isSidebarDragging) return;
+    function dragEnd() {
+        if (!isDragging) return;
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
         
-        sidebarInitialX = sidebarCurrentX;
-        sidebarInitialY = sidebarCurrentY;
-        isSidebarDragging = false;
-        
-        localStorage.setItem('rnk-12-ui-sidebar-position', JSON.stringify({
-            x: sidebarXOffset,
-            y: sidebarYOffset
+        localStorage.setItem('rnk-vintage-ui-sidebar-position', JSON.stringify({
+            x: xOffset,
+            y: yOffset
         }));
     }
 
-    sidebarTabs.addEventListener('mousedown', sidebarDragStart);
-    document.addEventListener('mousemove', sidebarDrag);
-    document.addEventListener('mouseup', sidebarDragEnd);
-    
-    sidebarTabs.addEventListener('click', (e) => {
-        if (hasSidebarDragged) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    }, true);
+    sidebarTabs.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
 }
 
 function setupSidebarMinimize(sidebarTabs) {

@@ -1,13 +1,22 @@
 # Changelog
 
-All notable changes to the RNK Vintage UI module will be documented in this file.
+All notable changes to the RNK™ Vintage UI module will be documented in this file.
+
+## [1.2.0] - 2026-01-04
+
+### Added
+- Settings menu with client-side controls
+- Per-user toggle to disable Vintage UI (revert to standard Foundry v13)
+- GM override setting to force Vintage UI for all players
+- Individual feature toggles for hotbar, scene controls, sidebar, and player list
+- Settings module for centralized configuration management
 
 ## [1.1.0] - 2026-01-04
 
 ### Changed
 - Refactored monolithic codebase into modular architecture
 - Split main script into 6 focused modules under 500 lines each
-- Improved code maintainability and organization per RNK standards
+- Improved code maintainability and organization per RNK™ standards
 
 ### Added
 - drag-handlers.js: Centralized drag state management for all UI elements
@@ -26,7 +35,7 @@ All notable changes to the RNK Vintage UI module will be documented in this file
 ## [1.0.0] - 2026-01-03
 
 ### Added
-- Initial release of RNK Vintage UI module
+- Initial release of RNK™ Vintage UI module
 - Hotbar repositioning from center-bottom to left side
 - Vertical layout for hotbar macro slots
 - Compatibility with Foundry VTT v11 and v12

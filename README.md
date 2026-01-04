@@ -1,4 +1,4 @@
-# RNK Vintage UI
+# RNK™ Vintage UI
 
 A Foundry Virtual Tabletop module that provides enhanced UI positioning, dragging, and minimize functionality for hotbar, scene controls, sidebar tabs, player lists, and scene navigation.
 
@@ -31,6 +31,20 @@ Coming soon to the official Foundry package listing.
 
 - Minimum Foundry VTT Version: 11
 - Verified Compatible Version: 12
+
+## Configuration
+
+Access settings via **Game Settings → Module Settings → RNK™ Vintage UI**
+
+### Client Settings (Per User):
+- **Enable Vintage UI** - Toggle all vintage features on/off (revert to standard Foundry v13 UI)
+- **Enable Hotbar Dragging** - Individual control for hotbar features
+- **Enable Scene Controls Dragging** - Individual control for scene controls
+- **Enable Sidebar Dragging** - Individual control for sidebar features
+- **Enable Player List Dragging** - Individual control for player list features
+
+### GM Settings (World-Wide):
+- **GM Override** - Force all players to use Vintage UI regardless of their personal settings
 
 ## Usage
 
@@ -82,7 +96,7 @@ npm test
 
 ## License
 
-All rights reserved by RNK.
+All rights reserved by RNK™.
 
 ## Support
 
@@ -90,7 +104,7 @@ For issues, feature requests, or support: https://www.patreon.com/rnk
 
 ## Author
 
-RNK
+RNK™
 
 ## Version History
 

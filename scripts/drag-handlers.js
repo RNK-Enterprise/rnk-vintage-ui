@@ -74,7 +74,7 @@ export const DragHandlers = {
             this.hotbar.initialX = this.hotbar.currentX;
             this.hotbar.initialY = this.hotbar.currentY;
             this.hotbar.isDragging = false;
-            localStorage.setItem('rnk-12-ui-hotbar-position', JSON.stringify({ 
+            localStorage.setItem('rnk-vintage-ui-hotbar-position', JSON.stringify({ 
                 x: this.hotbar.xOffset, 
                 y: this.hotbar.yOffset 
             }));
@@ -113,7 +113,7 @@ export const DragHandlers = {
             this.controls.initialX = this.controls.currentX;
             this.controls.initialY = this.controls.currentY;
             this.controls.isDragging = false;
-            localStorage.setItem('rnk-12-ui-controls-position', JSON.stringify({ 
+            localStorage.setItem('rnk-vintage-ui-controls-position', JSON.stringify({ 
                 x: this.controls.xOffset, 
                 y: this.controls.yOffset 
             }));
@@ -152,7 +152,7 @@ export const DragHandlers = {
             this.players.initialX = this.players.currentX;
             this.players.initialY = this.players.currentY;
             this.players.isDragging = false;
-            localStorage.setItem('rnk-12-ui-players-position', JSON.stringify({ 
+            localStorage.setItem('rnk-vintage-ui-players-position', JSON.stringify({ 
                 x: this.players.xOffset, 
                 y: this.players.yOffset 
             }));
@@ -190,7 +190,7 @@ export const DragHandlers = {
             this.active.initialX = this.active.currentX;
             this.active.initialY = this.active.currentY;
             this.active.isDragging = false;
-            localStorage.setItem('rnk-12-ui-players-active-position', JSON.stringify({ 
+            localStorage.setItem('rnk-vintage-ui-players-active-position', JSON.stringify({ 
                 x: this.active.xOffset, 
                 y: this.active.yOffset 
             }));

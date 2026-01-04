@@ -1,6 +1,7 @@
-// Player list and scene navigation modules for RNK 12 UI
+// Player list and scene navigation modules for RNK Vintage UI
 
 import { DragHandlers } from './drag-handlers.js';
+import { isFeatureEnabled } from './settings-module.js';
 
 export function initializePlayers() {
     const playersHandlers = DragHandlers.createPlayersHandlers();
@@ -12,6 +13,8 @@ export function initializePlayers() {
     document.addEventListener('mouseup', activeHandlers.dragEnd);
     
     Hooks.on('renderPlayerList', (app, html) => {
+        if (!isFeatureEnabled('enablePlayersDrag')) return;
+        
         setTimeout(() => {
             setupPlayersPanel(playersHandlers);
             setupPlayersActive(activeHandlers);
@@ -26,7 +29,7 @@ function setupPlayersPanel(handlers) {
     players.style.setProperty('position', 'fixed', 'important');
     players.style.cursor = 'move';
     
-    const savedPlayersPosition = localStorage.getItem('rnk-12-ui-players-position');
+    const savedPlayersPosition = localStorage.getItem('rnk-vintage-ui-players-position');
     if (savedPlayersPosition) {
         const pos = JSON.parse(savedPlayersPosition);
         players.style.setProperty('left', pos.x + 'px', 'important');
@@ -57,7 +60,7 @@ function setupPlayersActive(handlers) {
     playersActive.style.cursor = 'move';
     playersActive.style.setProperty('position', 'fixed', 'important');
 
-    const savedActivePosition = localStorage.getItem('rnk-12-ui-players-active-position');
+    const savedActivePosition = localStorage.getItem('rnk-vintage-ui-players-active-position');
     if (savedActivePosition) {
         const pos = JSON.parse(savedActivePosition);
         playersActive.style.setProperty('left', pos.x + 'px', 'important');

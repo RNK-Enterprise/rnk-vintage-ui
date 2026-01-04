@@ -1,6 +1,7 @@
-// Scene controls management module for RNK 12 UI
+// Scene controls management module for RNK Vintage UI
 
 import { DragHandlers } from './drag-handlers.js';
+import { isFeatureEnabled } from './settings-module.js';
 
 export function initializeSceneControls() {
     const handlers = DragHandlers.createControlsHandlers();
@@ -8,17 +9,33 @@ export function initializeSceneControls() {
     document.addEventListener('mousemove', handlers.drag);
     document.addEventListener('mouseup', handlers.dragEnd);
     
-    Hooks.on('renderSceneControls', () => {
+    function setupControls() {
+        if (!isFeatureEnabled('enableSceneControlsDrag')) return false;
         const sceneControls = document.getElementById('scene-controls');
-        if (!sceneControls) return;
+        if (!sceneControls) {
+            console.log('RNK Vintage UI | Scene controls element not found');
+            return false;
+        }
 
         setupControlsPosition(sceneControls, handlers);
         setupControlsMinimize(sceneControls);
+        console.log('RNK Vintage UI | Scene controls initialized');
+        return true;
+    }
+    
+    // Try on renderSceneControls hook
+    Hooks.on('renderSceneControls', () => {
+        setupControls();
     });
+    
+    // Also try immediately with timeout as fallback for v13
+    setTimeout(() => {
+        setupControls();
+    }, 500);
 }
 
 function setupControlsPosition(sceneControls, handlers) {
-    const savedControlsPosition = localStorage.getItem('rnk-12-ui-controls-position');
+    const savedControlsPosition = localStorage.getItem('rnk-vintage-ui-controls-position');
     if (savedControlsPosition) {
         const pos = JSON.parse(savedControlsPosition);
         sceneControls.style.setProperty('left', pos.x + 'px', 'important');
