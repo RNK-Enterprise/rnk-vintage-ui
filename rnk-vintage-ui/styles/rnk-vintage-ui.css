@@ -1,0 +1,37 @@
+#hotbar {
+  position: fixed !important;
+  user-select: none;
+  z-index: 100;
+}
+
+#sidebar-tabs {
+  position: fixed !important;
+  top: 10px !important;
+  right: 10px !important;
+  bottom: auto !important;
+  width: auto !important;
+  height: auto !important;
+  z-index: 100 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#sidebar-tabs > .flexcol {
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 5px;
+}
+
+#sidebar-tabs .item {
+  margin: 0 !important;
+}
+
+/* Fix Player List Position at bottom left */
+#players {
+  position: fixed !important;
+  top: auto !important;
+  bottom: 20px !important;
+  left: 20px !important;
+  right: auto !important;
+}
+
