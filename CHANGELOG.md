@@ -2,6 +2,12 @@
 
 All notable changes to the RNK™ Vintage UI module will be documented in this file.
 
+## [1.2.1] - 2026-01-10
+
+### Changed
+- Updated module manifest for Foundry premium content distribution
+- Migrated to R2 CDN hosting with Patreon integration
+
 ## [1.2.0] - 2026-01-04
 
 ### Added

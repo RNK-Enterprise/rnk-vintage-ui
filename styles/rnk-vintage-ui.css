@@ -7,7 +7,7 @@
 #sidebar-tabs {
   position: fixed !important;
   top: 10px !important;
-  right: 10px !important;
+  right: 394px !important; /* Moved left by 4 inches (384px) from original 10px */
   bottom: auto !important;
   width: auto !important;
   height: auto !important;
@@ -33,6 +33,16 @@
   bottom: 20px !important;
   left: 20px !important;
   right: auto !important;
+}
+
+/* Move Scene Navigation to the right by 1 inch (96px) */
+#scene-navigation {
+  left: 96px !important;
+  pointer-events: none !important;
+}
+
+#scene-navigation > * {
+  pointer-events: auto !important;
 }
 
 /* RNK Hub Button in Scene Controls */
